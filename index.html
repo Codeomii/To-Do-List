@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dimensional | 3D Interactive Task Manager</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ambient Glowing Background Spheres -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Background Grid Pattern -->
+  <div class="bg-grid-overlay"></div>
+
+  <!-- Main 3D Perspective Wrapper -->
+  <main class="app-viewport">
+    
+    <!-- Central Floating Glass Card -->
+    <div class="glass-card-3d" id="main-card">
+      
+      <!-- 3D Card Header -->
+      <header class="app-header">
+        <div class="header-branding">
+          <div class="logo-3d">
+            <i class="fa-solid fa-cubes-stacked"></i>
+          </div>
+          <div>
+            <h1 class="app-title">TaskSpace <span>3D</span></h1>
+            <p class="app-subtitle">Elevate your productivity in three dimensions</p>
+          </div>
+        </div>
+
+        <!-- Quick Summary Badge -->
+        <div class="quick-status-badge">
+          <span class="status-dot"></span>
+          <span id="header-status-text">Ready</span>
+        </div>
+      </header>
+
+      <!-- Progress Section -->
+      <section class="progress-section">
+        <div class="progress-info">
+          <span class="progress-label"><i class="fa-solid fa-chart-pie"></i> Completion Status</span>
+          <span class="progress-percent" id="progress-percent-text">0%</span>
+        </div>
+        <div class="progress-bar-3d-track">
+          <div class="progress-bar-3d-fill" id="progress-fill">
+            <div class="progress-glow-head"></div>
+          </div>
+        </div>
+        <div class="stats-counter-row">
+          <div class="stat-pill">
+            <span class="stat-num" id="stat-total">0</span>
+            <span class="stat-desc">Total</span>
+          </div>
+          <div class="stat-pill stat-active">
+            <span class="stat-num" id="stat-pending">0</span>
+            <span class="stat-desc">Pending</span>
+          </div>
+          <div class="stat-pill stat-completed">
+            <span class="stat-num" id="stat-completed">0</span>
+            <span class="stat-desc">Done</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Task Creator Form -->
+      <form id="todo-form" class="task-form-3d">
+        <div class="input-group-3d">
+          <div class="input-wrapper">
+            <i class="fa-solid fa-pen-nib input-icon"></i>
+            <input 
+              type="text" 
+              id="task-input" 
+              placeholder="What high-impact task needs doing today?..." 
+              autocomplete="off"
+              required
+            >
+          </div>
+          
+          <div class="priority-select-wrapper">
+            <i class="fa-solid fa-layer-group select-icon"></i>
+            <select id="priority-select" title="Select Priority">
+              <option value="low">Low Priority</option>
+              <option value="medium" selected>Med Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+            <i class="fa-solid fa-chevron-down custom-arrow"></i>
+          </div>
+
+          <button type="submit" class="btn-3d btn-primary" id="add-btn">
+            <span class="btn-content">
+              <i class="fa-solid fa-plus"></i>
+              <span>Add Task</span>
+            </span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Search & Filters Toolbar -->
+      <div class="toolbar-3d">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-input" placeholder="Search tasks...">
+          <button type="button" class="clear-search-btn" id="clear-search" style="display: none;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="filter-tabs-3d" role="tablist">
+          <button class="filter-tab active" data-filter="all">
+            <span>All</span>
+          </button>
+          <button class="filter-tab" data-filter="active">
+            <span>Active</span>
+          </button>
+          <button class="filter-tab" data-filter="completed">
+            <span>Done</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tasks List Container -->
+      <div class="tasks-container">
+        <ul id="task-list" class="task-list">
+          <!-- Dynamically Generated 3D Task Cards -->
+        </ul>
+
+        <!-- Empty State Container -->
+        <div id="empty-state" class="empty-state">
+          <div class="empty-3d-box">
+            <div class="floating-icon">
+              <i class="fa-solid fa-box-open"></i>
+            </div>
+          </div>
+          <h3>No tasks found</h3>
+          <p id="empty-msg">You're all clear! Add a new task above to get started.</p>
+        </div>
+      </div>
+
+      <!-- Footer Action Row -->
+      <footer class="app-footer">
+        <div class="shortcut-tip">
+          <i class="fa-solid fa-keyboard"></i> Press <kbd>Enter</kbd> to add task quickly
+        </div>
+        <button type="button" class="btn-3d btn-ghost" id="clear-completed-btn">
+          <i class="fa-solid fa-broom"></i> Clear Finished
+        </button>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Custom JS -->
+  <script src="script.js"></script>
+</body>
+</html>

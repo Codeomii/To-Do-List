@@ -1,0 +1,1059 @@
+/* ==========================================================================
+   TASKSPACE 3D - MODERN DESIGN SYSTEM & STYLESHEET
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. COLOR PALETTE & DESIGN TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+  /* Background & Base Layers */
+  --bg-main: #090d16;
+  --bg-secondary: #0f172a;
+  --card-bg: rgba(23, 31, 51, 0.65);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-border-glow: rgba(124, 58, 237, 0.35);
+
+  /* Neon Accents */
+  --accent-violet: #8b5cf6;
+  --accent-violet-glow: rgba(139, 92, 246, 0.5);
+  --accent-cyan: #06b6d4;
+  --accent-cyan-glow: rgba(6, 182, 212, 0.4);
+  --accent-pink: #ec4899;
+  --accent-emerald: #10b981;
+
+  /* Priority Colors */
+  --priority-high: #ff4757;
+  --priority-high-glow: rgba(255, 71, 87, 0.4);
+  --priority-med: #ffa502;
+  --priority-med-glow: rgba(255, 165, 2, 0.4);
+  --priority-low: #2ed573;
+  --priority-low-glow: rgba(46, 213, 115, 0.4);
+
+  /* Typography */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+
+  /* 3D Shadows & Depth */
+  --shadow-card-3d: 
+    0 30px 60px -12px rgba(0, 0, 0, 0.75),
+    0 18px 36px -18px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+
+  --shadow-btn-3d: 
+    0 6px 0 #5b21b6,
+    0 12px 20px rgba(124, 58, 237, 0.4);
+  
+  --shadow-btn-pressed: 
+    0 2px 0 #5b21b6,
+    0 4px 10px rgba(124, 58, 237, 0.3);
+
+  --shadow-inset-3d: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.6),
+    inset 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --radius-lg: 24px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. GLOBAL RESETS & BASE LAYOUT
+   -------------------------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+  padding: 2rem 1rem;
+}
+
+/* Ambient Glowing Background Orbs */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  animation: floatGlow 14s infinite alternate ease-in-out;
+}
+
+.glow-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, var(--accent-violet) 0%, rgba(124, 58, 237, 0) 70%);
+  top: -100px;
+  left: -100px;
+}
+
+.glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent-cyan) 0%, rgba(6, 182, 212, 0) 70%);
+  bottom: -150px;
+  right: -100px;
+  animation-delay: -5s;
+}
+
+.glow-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--accent-pink) 0%, rgba(236, 72, 153, 0) 70%);
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.25;
+  animation-delay: -9s;
+}
+
+@keyframes floatGlow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(40px, 30px) scale(1.1);
+  }
+  100% {
+    transform: translate(-30px, 50px) scale(0.95);
+  }
+}
+
+/* Background Grid Lines */
+.bg-grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. 3D CONTAINER & CARD SYSTEM
+   -------------------------------------------------------------------------- */
+.app-viewport {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  perspective: 1200px;
+  margin: 0 auto;
+}
+
+.glass-card-3d {
+  background: var(--card-bg);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-3d);
+  padding: 2.25rem;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-violet), var(--accent-cyan), transparent);
+  opacity: 0.8;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+  transform: translateZ(25px);
+}
+
+.header-branding {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-3d {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: #ffffff;
+  box-shadow: 
+    0 10px 20px rgba(139, 92, 246, 0.4),
+    inset 0 2px 2px rgba(255, 255, 255, 0.4);
+  transform: rotate(-4deg) translateZ(10px);
+  transition: transform var(--transition-bounce);
+}
+
+.logo-3d:hover {
+  transform: rotate(0deg) scale(1.08) translateZ(15px);
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.app-title span {
+  background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-subtitle {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.quick-status-badge {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-emerald);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-emerald);
+}
+
+/* --------------------------------------------------------------------------
+   4. PROGRESS & STATS BAR (3D BEVEL)
+   -------------------------------------------------------------------------- */
+.progress-section {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.75rem;
+  transform: translateZ(20px);
+  box-shadow: var(--shadow-inset-3d);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.progress-label {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-label i {
+  color: var(--accent-violet);
+}
+
+.progress-percent {
+  color: var(--accent-cyan);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* 3D Visual Progress Bar Track */
+.progress-bar-3d-track {
+  width: 100%;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  padding: 2px;
+  box-shadow: 
+    inset 0 3px 5px rgba(0, 0, 0, 0.8),
+    inset 0 1px 1px rgba(0, 0, 0, 0.9),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-3d-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan));
+  border-radius: 20px;
+  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  box-shadow: 0 0 12px var(--accent-violet-glow);
+}
+
+.progress-glow-head {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ffffff, 0 0 20px var(--accent-cyan);
+  opacity: 0.8;
+}
+
+.stats-counter-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.stat-pill:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.stat-num {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.stat-desc {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.stat-active .stat-num { color: var(--priority-med); }
+.stat-completed .stat-num { color: var(--accent-emerald); }
+
+/* --------------------------------------------------------------------------
+   5. TASK CREATOR FORM & 3D BUTTONS
+   -------------------------------------------------------------------------- */
+.task-form-3d {
+  margin-bottom: 1.5rem;
+  transform: translateZ(30px);
+}
+
+.input-group-3d {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.input-wrapper {
+  flex: 1 1 240px;
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 1rem;
+  transition: color var(--transition-fast);
+}
+
+#task-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem 0.875rem 2.8rem;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.925rem;
+  box-shadow: var(--shadow-inset-3d);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#task-input::placeholder {
+  color: var(--text-dim);
+}
+
+#task-input:focus {
+  border-color: var(--accent-violet);
+  box-shadow: 
+    inset 0 3px 6px rgba(0, 0, 0, 0.6),
+    0 0 15px var(--accent-violet-glow);
+}
+
+#task-input:focus + .input-icon,
+.input-wrapper:focus-within .input-icon {
+  color: var(--accent-violet);
+}
+
+/* Priority Select */
+.priority-select-wrapper {
+  position: relative;
+  flex: 0 0 150px;
+}
+
+.select-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+
+.custom-arrow {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  pointer-events: none;
+}
+
+#priority-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 2rem 0.875rem 2.3rem;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-inset-3d);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+#priority-select:focus {
+  border-color: var(--accent-violet);
+}
+
+#priority-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+}
+
+/* 3D Button Components */
+.btn-3d {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  position: relative;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #ffffff;
+  padding: 0.875rem 1.4rem;
+  box-shadow: var(--shadow-btn-3d);
+  transform: translateY(-2px);
+  flex: 0 0 auto;
+}
+
+.btn-primary .btn-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.925rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 
+    0 8px 0 #5b21b6,
+    0 15px 25px rgba(139, 92, 246, 0.5);
+  transform: translateY(-4px);
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: var(--shadow-btn-pressed);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  gap: 6px;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.btn-ghost:active {
+  transform: translateY(1px);
+}
+
+/* --------------------------------------------------------------------------
+   6. SEARCH & FILTER TOOLBAR
+   -------------------------------------------------------------------------- */
+.toolbar-3d {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  transform: translateZ(20px);
+}
+
+.search-box {
+  position: relative;
+  flex: 1 1 200px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+#search-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  padding: 0.5rem 2.2rem 0.5rem 2.2rem;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.825rem;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+#search-input:focus {
+  border-color: var(--accent-cyan);
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: 0 0 10px var(--accent-cyan-glow);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.clear-search-btn:hover {
+  color: #ffffff;
+}
+
+/* Filter Tabs */
+.filter-tabs-3d {
+  display: flex;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 4px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-inset-3d);
+}
+
+.filter-tab {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-tab:hover {
+  color: #ffffff;
+}
+
+.filter-tab.active {
+  background: linear-gradient(135deg, var(--accent-violet), #6d28d9);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   7. TASK LIST & 3D TASK CARDS
+   -------------------------------------------------------------------------- */
+.tasks-container {
+  min-height: 240px;
+  position: relative;
+  transform: translateZ(35px);
+}
+
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* Individual 3D Task Card */
+.task-card-3d {
+  background: rgba(26, 35, 57, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: 
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.3s ease;
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+/* Hover Lift Effect */
+.task-card-3d:hover {
+  transform: translateY(-4px) translateZ(10px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 16px 28px rgba(0, 0, 0, 0.45),
+    0 0 15px rgba(139, 92, 246, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0; /* Prevents flex overflow */
+}
+
+/* Custom 3D Checkbox */
+.checkbox-3d-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.checkbox-3d-wrapper input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.checkbox-custom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 7px;
+  box-shadow: var(--shadow-inset-3d);
+  transition: all var(--transition-bounce);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-size: 0.75rem;
+}
+
+.checkbox-3d-wrapper:hover .checkbox-custom {
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 10px var(--accent-violet-glow);
+}
+
+.checkbox-3d-wrapper input[type="checkbox"]:checked + .checkbox-custom {
+  background: linear-gradient(135deg, var(--accent-emerald), #059669);
+  border-color: var(--accent-emerald);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  transform: scale(1.05);
+}
+
+/* Task Content */
+.task-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+  word-break: break-word;
+  transition: color 0.25s ease, text-decoration 0.25s ease;
+}
+
+/* Completed State */
+.task-card-3d.completed {
+  background: rgba(15, 23, 42, 0.4);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.task-card-3d.completed .task-text {
+  color: var(--text-dim);
+  text-decoration: line-through;
+}
+
+.task-card-3d.completed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.1);
+  pointer-events: none;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Priority Badges */
+.priority-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.priority-high {
+  background: rgba(255, 71, 87, 0.15);
+  color: var(--priority-high);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  box-shadow: 0 0 8px var(--priority-high-glow);
+}
+
+.priority-medium {
+  background: rgba(255, 165, 2, 0.15);
+  color: var(--priority-med);
+  border: 1px solid rgba(255, 165, 2, 0.3);
+  box-shadow: 0 0 8px var(--priority-med-glow);
+}
+
+.priority-low {
+  background: rgba(46, 213, 115, 0.15);
+  color: var(--priority-low);
+  border: 1px solid rgba(46, 213, 115, 0.3);
+  box-shadow: 0 0 8px var(--priority-low-glow);
+}
+
+.task-time {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* Actions Right */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-btn-3d {
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 71, 87, 0.08);
+  border: 1px solid rgba(255, 71, 87, 0.15);
+  border-radius: var(--radius-sm);
+  color: rgba(255, 71, 87, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 0.85rem;
+}
+
+.delete-btn-3d:hover {
+  background: var(--priority-high);
+  color: #ffffff;
+  border-color: var(--priority-high);
+  box-shadow: 0 0 12px var(--priority-high-glow);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.delete-btn-3d:active {
+  transform: scale(0.95);
+}
+
+/* 3D Removal Animation Class */
+.task-card-3d.removing {
+  opacity: 0;
+  transform: rotateX(-30deg) translateY(-20px) translateZ(-50px) scale(0.8);
+  margin-top: -60px;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. EMPTY STATE & FOOTER
+   -------------------------------------------------------------------------- */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state.show {
+  display: flex;
+}
+
+.empty-3d-box {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transform: rotateX(15deg) rotateY(-15deg);
+  animation: floatBox 4s infinite alternate ease-in-out;
+}
+
+@keyframes floatBox {
+  0% { transform: rotateX(15deg) rotateY(-15deg) translateY(0); }
+  100% { transform: rotateX(25deg) rotateY(-5deg) translateY(-12px); }
+}
+
+.floating-icon {
+  font-size: 2.25rem;
+  color: var(--accent-cyan);
+}
+
+.empty-state h3 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.35rem;
+}
+
+.empty-state p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 280px;
+}
+
+/* Footer */
+.app-footer {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.775rem;
+  color: var(--text-dim);
+  transform: translateZ(15px);
+}
+
+.shortcut-tip kbd {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--text-main);
+  font-family: monospace;
+}
+
+/* --------------------------------------------------------------------------
+   9. TOAST NOTIFICATION SYSTEM
+   -------------------------------------------------------------------------- */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.toast {
+  background: rgba(23, 31, 51, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--accent-violet);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transform: translateY(20px) scale(0.9);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast.show {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.toast-icon {
+  color: var(--accent-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   10. RESPONSIVE DESIGN
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+
+  .glass-card-3d {
+    padding: 1.5rem 1.1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .quick-status-badge {
+    align-self: flex-start;
+  }
+
+  .input-group-3d {
+    flex-direction: column;
+  }
+
+  .priority-select-wrapper {
+    flex: 1 1 100%;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+
+  .toolbar-3d {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-tabs-3d {
+    justify-content: center;
+  }
+
+  .app-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    text-align: center;
+  }
+}
