@@ -3,17 +3,9 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
+
 
 **TaskSpace 3D** is a high-performance, visually immersive To-Do web application built using modern Web Technologies (HTML5, CSS3, and Pure JavaScript). Featuring a dark-mode 3D glassmorphism interface, interactive analytics, priority tagging, and real-time state filtering, it elevates daily task management into an engaging visual experience.
-
----
-
-## 🖼️ Application Interface
-
-<div align="center">
-  <img src="https://via.placeholder.com/800x450.png?text=TaskSpace+3D+Preview" alt="TaskSpace 3D Preview" width="100%">
-</div>
 
 ---
 
